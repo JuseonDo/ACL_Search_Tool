@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ACL 논문 검색기</title>
+</head>
+<body>
+  <h2>🔎 ACL 논문 검색</h2>
+  <input type="text" id="queryInput" placeholder="예: factual summarization">
+  <button onclick="crawl()">검색</button>
+  <pre id="resultArea"></pre>
+
+  <script>
+    function crawl() {
+      const query = document.getElementById("queryInput").value;
+      document.getElementById("resultArea").textContent = "⏳ 검색 중...";
+      fetch("/crawl", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("resultArea").textContent = data.result || "❌ 오류: " + data.error;
+      });
+    }
+  </script>
+</body>
+</html>
